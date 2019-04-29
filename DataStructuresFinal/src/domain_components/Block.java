@@ -24,6 +24,11 @@ public class Block {
 	
 	// cosmetic data for GUI
 	private Street street;
+	private Street top;
+	private Street bottom;
+	private int numDelivered;
+	public boolean isDone;
+	public int mailManLoc;
 	
 	// mail delivery data
 	private List<Address> allAddresses;
@@ -47,6 +52,8 @@ public class Block {
 		if (s.getNorthSouth().getStreetName().equals(e.getNorthSouth().getStreetName())) 
 		{
 			street = s.getNorthSouth();
+			top = e.getEastWest();
+			bottom = s.getEastWest();
 			
 			if (s.getBlockNumNS() > e.getBlockNumNS()) {
 				blockStartHouseNum = e.getBlockNumNS();
@@ -65,6 +72,8 @@ public class Block {
 		else if (s.getEastWest().getStreetName().equals(e.getEastWest().getStreetName())) 
 		{
 			street = s.getEastWest();
+			top = e.getNorthSouth();
+			bottom = s.getNorthSouth();
 			
 			if (s.getBlockNumEW() > e.getBlockNumEW()) 
 			{
@@ -91,7 +100,10 @@ public class Block {
 		allAddresses = new LinkedList<Address>();
 		goDown = new Stack<Address>();
 		goUp = new LinkedList<Address>();
+		numDelivered = 0;
 		populate();
+		isDone = false;
+		mailManLoc = 2;
 		
 	}
 	
@@ -110,6 +122,18 @@ public class Block {
 	
 	public Street getStreet() {
 		return street;
+	}
+	
+	public String getBlockName() {
+		return street.getStreetName();
+	}
+	
+	public String getTopRoadName() {
+		return top.getStreetName();
+	}
+	
+	public String getBtmRoadName() {
+		return bottom.getStreetName();
 	}
 	
 	public List<Address> getAddresses(){
@@ -178,5 +202,32 @@ public class Block {
 		}
 		System.out.println(" ");
 		System.out.println("FINISHED DELIVERING MAIL FOR THIS BLOCK.");
+	}
+	
+	public boolean deliverNext() {
+		boolean returnVal = false;
+		if (!goUp.isEmpty()) {
+			Address temp = goUp.poll();
+			temp.deliverMail();
+			mailManLoc+=4;
+			if (goUp.isEmpty()) {
+				mailManLoc-=2;
+			}
+			
+			returnVal = true;
+		}
+		else if (!goDown.isEmpty())
+		{
+			Address temp = goDown.pop();
+			temp.deliverMail();
+			mailManLoc-=4;
+			returnVal = true;
+		}
+		else 
+		{
+			isDone = true;
+			returnVal = false;
+		}
+		return returnVal;
 	}
 }

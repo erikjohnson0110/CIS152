@@ -2,6 +2,7 @@ package control;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import domain_components.Address;
 import domain_components.Block;
@@ -12,8 +13,10 @@ public class MailControl {
 	private List<Street> streetsNorthSouth;
 	private List<Street> streetsEastWest;
 	private List<Intersection> intersections;
-	private List<Block> blocks;
+	private Queue<Block> blocks;
 	private List<Address> addresses;
+	
+	private Block current;
 	
 	private Intersection[][] intersectionArray;
 	private int arrRows;
@@ -29,9 +32,11 @@ public class MailControl {
 		blocks = new LinkedList<Block>();
 		
 		addresses = new LinkedList<Address>();
+		current = null;
 	}
 	
 	public void generateNeighborhood() {
+		initialize();
 		streetsEastWest.add(new Street("Douglas Avenue", "EW", 310));
 		streetsEastWest.add(new Street("Hickman Road", "EW", 300));
 		streetsEastWest.add(new Street("University Avenue", "EW", 280));
@@ -73,24 +78,35 @@ public class MailControl {
 		}
 		
 		for (int m = 0; m < blocks.size(); m++) {
-			Block temp = blocks.get(m);
+			Block temp = blocks.poll();
 			List<Address> tempList = temp.getAddresses();
 			for (int n = 0; n < tempList.size(); n++) {
 				addresses.add(tempList.get(n));
 			}
+			blocks.add(temp);
 		}
 		
 	}
 	
-	public void deliverMail() {
-		System.out.println("*******************************");
-		System.out.println("Delivering Mail");
-		System.out.println("*******************************");
-		System.out.println("");
-		
-		for (int b = 0; b < blocks.size(); b++) {
-			Block temp = blocks.get(b);
-			temp.deliver();
-		}
+	public Block getCurrentBlock() {
+		return current;
+	}
+	
+	public boolean deliverNext() {
+		boolean returnVal = false;
+		returnVal = current.deliverNext();
+		return returnVal;
+	}
+	
+	public Block getNextBlock() {
+		return blocks.poll();
+	}
+	
+	private void initialize() {
+		streetsEastWest.clear();
+		streetsNorthSouth.clear();
+		addresses.clear();
+		blocks.clear();
+		current = null;
 	}
 }

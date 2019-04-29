@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,27 +9,32 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import control.MailControl;
+import domain_components.Block;
 
 public class MailPanel extends JPanel {
 	
 	// Class to control mail logic
 	private MailControl mc = new MailControl();
+	private Block current;
 	// class to draw component
+	private MailDraw draw = new MailDraw();
 	
 	private JLabel headerTextLabel = new JLabel("Welcome to Mail Delivery Simulator");
 	private JButton generateBtn = new JButton("Generate Mail");
-	private JButton deliverBtn = new JButton("Deliver Mail");
 	private JButton exitBtn = new JButton("Exit");
+	private JLabel spacerLabel = new JLabel("                                               ");
+	private JButton deliverBtn = new JButton("Deliver Mail");
 	
 	public MailPanel() {
 		// add all of the labels, textfields, buttons, and art components
 		add(headerTextLabel);
 		add(generateBtn);
-		add(deliverBtn);
 		add(exitBtn);
+		add(spacerLabel);
+		add(deliverBtn);
+		add(draw);
+		draw.setPreferredSize(new Dimension(501, 501));
 		
-		//tm.setPreferredSize(new Dimension(225, 110)); // set preferred size for component.
-		//add(errorLabel);
 		
 		// create and add action listeners to buttons
 		GenerateActionListener gl = new GenerateActionListener();
@@ -39,6 +45,9 @@ public class MailPanel extends JPanel {
 		
 		ExitActionListener el = new ExitActionListener();
 		exitBtn.addActionListener(el);
+		
+		deliverBtn.setEnabled(false);
+		current = null;
 	}
 	
 	// Action Listeners
@@ -50,7 +59,8 @@ public class MailPanel extends JPanel {
 			// TODO Auto-generated method stub
 			generateBtn.setEnabled(false);
 			mc.generateNeighborhood();
-			generateBtn.setEnabled(true);
+			deliverBtn.setEnabled(true);
+			
 		}
 		
 	}
@@ -61,9 +71,26 @@ public class MailPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			deliverBtn.setEnabled(false);
-			mc.deliverMail();
-			deliverBtn.setEnabled(true);
+			//deliverBtn.setEnabled(false);
+			//mc.deliverMail();
+			//generateBtn.setEnabled(true);
+			
+			if (current != null && !current.isDone) {
+				current.deliverNext();
+				draw.setBlockGraphic(current);
+			}
+			else {
+				current = mc.getNextBlock();
+				if (current != null) {
+					draw.setBlockGraphic(current);
+				}
+				else 
+				{
+					deliverBtn.setEnabled(false);
+					generateBtn.setEnabled(true);
+				}
+			}
+			draw.repaint();
 		}
 		
 	}

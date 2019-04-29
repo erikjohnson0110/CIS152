@@ -24,11 +24,12 @@ public class ViewDriver {
 		frame.add(panel);
 		
 		// set the frame size
-		frame.setSize(275, 300);
+		frame.setSize(600, 600);
 		// set the frame default close
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// make the frame visible.
 		frame.setVisible(true);
+		frame.setResizable(false);
 		
 	}
 

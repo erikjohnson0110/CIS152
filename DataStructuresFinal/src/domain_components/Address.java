@@ -89,7 +89,7 @@ public class Address
 	 * 
 	 */
 	public void deliverMail() {
-		setNumberOfLetters(0);
+		//setNumberOfLetters(0);
 		isDelievered = true;
 	}
 }
