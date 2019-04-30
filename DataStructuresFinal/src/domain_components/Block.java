@@ -26,7 +26,7 @@ public class Block {
 	private Street street;
 	private Street top;
 	private Street bottom;
-	private int numDelivered;
+	private int lastNumDelivered;
 	public boolean isDone;
 	public int mailManLoc;
 	
@@ -100,7 +100,7 @@ public class Block {
 		allAddresses = new LinkedList<Address>();
 		goDown = new Stack<Address>();
 		goUp = new LinkedList<Address>();
-		numDelivered = 0;
+		lastNumDelivered = 0;
 		populate();
 		isDone = false;
 		mailManLoc = 2;
@@ -140,6 +140,10 @@ public class Block {
 		return allAddresses;
 	}
 	
+	public int getLastNumDelivered() {
+		return lastNumDelivered;
+	}
+	
 	// Mutators
 	public void addAddress(String name, int num, int let) {
 		allAddresses.add(new Address(name, num, let));
@@ -151,19 +155,19 @@ public class Block {
 		int houseNum = blockStartHouseNum;
 		int numLetters = 0;
 		
-		System.out.println("Creating mail for " + blockStartHouseNum + " block of " + streetName);
-		System.out.println(" ");
+		//System.out.println("Creating mail for " + blockStartHouseNum + " block of " + streetName);
+		//System.out.println(" ");
 		
 		for (int i = 0; i < blockLength - 1; i++) 
 		{
 			houseNum++;
-			System.out.println("POPULATING MAIL FOR ADDRESS: " + houseNum + " " + streetName);
+			//System.out.println("POPULATING MAIL FOR ADDRESS: " + houseNum + " " + streetName);
 			numLetters = (int)(Math.random() * 5);
 			addAddress(streetName, houseNum, numLetters);
 		}
-		System.out.println(" ");
-		System.out.println("SORTING MAIL FOR THE BLOCK");
-		System.out.println("***********************************************");
+		//System.out.println(" ");
+		//System.out.println("SORTING MAIL FOR THE BLOCK");
+		//System.out.println("***********************************************");
 		for (int j = 0; j < allAddresses.size(); j++) 
 		{
 			Address temp = allAddresses.get(j);
@@ -179,12 +183,13 @@ public class Block {
 		}
 	}
 	
+	// Delete this method????
 	public void deliver() 
 	{
-		System.out.println("");
-		System.out.println("***************************************");
-		System.out.println("Delivering mail for " + blockStartHouseNum + " block of " + street.getStreetName());
-		System.out.println("");
+		//System.out.println("");
+		//System.out.println("***************************************");
+		//System.out.println("Delivering mail for " + blockStartHouseNum + " block of " + street.getStreetName());
+		//System.out.println("");
 		
 		while (!goUp.isEmpty()) 
 		{
@@ -208,6 +213,7 @@ public class Block {
 		boolean returnVal = false;
 		if (!goUp.isEmpty()) {
 			Address temp = goUp.poll();
+			lastNumDelivered = temp.getNumberOfLetters();
 			temp.deliverMail();
 			mailManLoc+=4;
 			if (goUp.isEmpty()) {
@@ -219,12 +225,14 @@ public class Block {
 		else if (!goDown.isEmpty())
 		{
 			Address temp = goDown.pop();
+			lastNumDelivered = temp.getNumberOfLetters();
 			temp.deliverMail();
 			mailManLoc-=4;
 			returnVal = true;
 		}
 		else 
 		{
+			lastNumDelivered = 0;
 			isDone = true;
 			returnVal = false;
 		}

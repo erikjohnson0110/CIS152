@@ -11,9 +11,8 @@ import javax.swing.JComponent;
 
 import domain_components.Address;
 import domain_components.Block;
-import domain_components.Intersection;
-import domain_components.Street;
 
+@SuppressWarnings("serial")
 public class MailDraw extends JComponent {
 	private boolean blockLoaded = false;
 	
@@ -171,10 +170,10 @@ public class MailDraw extends JComponent {
 		int lotMaxYBoundAccumulator = lotMinYBoundAccumulator + lotHeight;
 		
 		int[] leftLotXPoints = {leftMinX, leftMinX, leftMaxX, leftMaxX};
-		int[] leftLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
+		//int[] leftLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
 		
 		int[] rightLotXPoints = {rightMinX, rightMinX, rightMaxX, rightMaxX};
-		int[] rightLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
+		//int[] rightLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
 		
 		allAddresses = b.getAddresses();
 		//evenCoordIndices = new int[lotsPerSide];
@@ -195,7 +194,7 @@ public class MailDraw extends JComponent {
 			}
 		}
 		
-		List<int[]> tempCoords = new LinkedList();
+		List<int[]> tempCoords = new LinkedList<int[]>();
 		for (int j = 0; j < lotsPerSide; j++) {
 			int[] tempY = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
 			tempCoords.add(leftLotXPoints);
@@ -210,84 +209,4 @@ public class MailDraw extends JComponent {
 		coordsToDraw = tempCoords;
 	}
 	
-	public void testGraphic() {
-		// receive a block, paint a block.
-		// setup test data
-		Street testTop = new Street("Douglas Avenue", "EW", 340);
-		Street testBtm = new Street("Hickman Road", "EW", 300);
-		Street testBlkSt = new Street("62nd Street", "NS", 620);
-		
-		Intersection testTopInt = new Intersection(testBlkSt, testTop);
-		Intersection testBtmInt = new Intersection(testBlkSt, testBtm);
-		
-		Block testBlk = new Block(testTopInt, testBtmInt);
-		
-		// setup test drawing data
-		int blockSize = (testBlk.getLength()); // check this??
-		//System.out.println("blockSize: " + blockSize);
-		
-		int lotsPerSide = (blockSize / 2);
-		//System.out.println("lotsPerSide: " + lotsPerSide);
-		
-		int lotHeight = ((addressMaxY - addressMinY) / lotsPerSide);
-		//System.out.println("LotHeight: " + lotHeight);
-		
-		int lotMinYBoundAccumulator = addressMinY; // initial value set to minY
-		int lotMaxYBoundAccumulator = lotMinYBoundAccumulator + lotHeight;
-		
-		int[] leftLotXPoints = {leftMinX, leftMinX, leftMaxX, leftMaxX};
-		int[] leftLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
-		
-		int[] rightLotXPoints = {rightMinX, rightMinX, rightMaxX, rightMaxX};
-		int[] rightLotYPoints = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
-		
-		allAddresses = testBlk.getAddresses();
-		
-		//System.out.println("allAddresses Size: " + allAddresses.size());
-		//System.out.println("Evens size: " + testEvens.size());
-		//System.out.println("Odds size: " + testOdds.size());
-		
-		// separate out addresses into evens and odds.
-		for (int i = 0; i < allAddresses.size(); i++) {
-			if ((allAddresses.get(i).getStreetNumber() % 2) == 0) {
-				testEvens.add(allAddresses.get(i));
-				//System.out.println("Added even: Index (" + i + ")");
-			}
-			else if ((allAddresses.get(i).getStreetNumber() % 2) == 1) {
-				testOdds.add(allAddresses.get(i));
-				//System.out.println("Added odd: Index (" + i + ")");
-			}
-		}
-		
-		//System.out.println("Evens Size: " + testEvens.size());
-		//System.out.println("Odds Size: " + testOdds.size());
-		// store coords for draw
-		/*
-		List<int[]> leftCoords = new LinkedList<int[]>();
-		
-		for (int j = 0; j < testEvens.size(); j++) {
-			int[] tempY = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
-			leftCoords.add(leftLotXPoints);
-			leftCoords.add(tempY);
-			
-			lotMinYBoundAccumulator += lotHeight;
-			lotMaxYBoundAccumulator += lotHeight;
-		}
-		System.out.println("coordArray Size: " + leftCoords.size());
-		coordsToDraw = leftCoords;
-		*/
-		List<int[]> tempCoords = new LinkedList();
-		for (int j = 0; j < lotsPerSide; j++) {
-			int[] tempY = {lotMinYBoundAccumulator, lotMaxYBoundAccumulator, lotMaxYBoundAccumulator, lotMinYBoundAccumulator};
-			tempCoords.add(leftLotXPoints);
-			tempCoords.add(tempY);
-			
-			tempCoords.add(rightLotXPoints);
-			tempCoords.add(tempY);
-			
-			lotMinYBoundAccumulator += lotHeight;
-			lotMaxYBoundAccumulator += lotHeight;
-		}
-		coordsToDraw = tempCoords;
-	}
 }
