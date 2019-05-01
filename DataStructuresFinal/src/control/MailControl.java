@@ -9,6 +9,12 @@ import domain_components.Block;
 import domain_components.Intersection;
 import domain_components.Street;
 
+/**This is the control class for my program's data.  It encapsulates
+ * the program data from the GUI layer, and keeps all of the logic separate
+ * from the GUI.
+ * @author Erik E Johnson
+ *
+ */
 public class MailControl {
 	private List<Street> streetsNorthSouth;
 	private List<Street> streetsEastWest;
