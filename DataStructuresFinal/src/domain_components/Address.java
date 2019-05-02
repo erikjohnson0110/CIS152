@@ -2,7 +2,7 @@ package domain_components;
 
 
 /**This is a component class designed to store address data 
- * that is stored in a domain data structure.  It is used by the
+ * that is stored in a block.  It is used by the
  * simulation to represent the data of a single address.
  * This is similar to a "Node" in a stack/queue or other ADT
  * @author Erik E Johnson
@@ -10,86 +10,107 @@ package domain_components;
  */
 public class Address 
 {
-	private String streetName;
-	private String fullAddressString;
-	private int streetNumber;
-	private int numberOfLetters;
-	private boolean isDelievered;
+	private String streetName;        // the street name that this address is on
+	private String fullAddressString; // the full address string, for easy cosmetic access
+	private int streetNumber;         // the house number of this address
+	private int numberOfLetters;      // the number of letters to be delivered
+	private boolean isDelievered;     // status of if the letters have been delivered
 	
 	// Constructors
-	/**
-	 * @param name
-	 * @param num
-	 * @param l
+	/** Sole constructor - Requires a street name, house number, and
+	 * number of letters
+	 * @param name - the street name
+	 * @param num - the house number
+	 * @param l - the number of letters to be delivered
 	 */
 	public Address(String name, int num, int l) {
-		setStreetName(name);
-		setStreetNumber(num);
-		setNumberOfLetters(l);
-		isDelievered = false;
-		fullAddressString = streetNumber + " " + streetName;
+		try {
+			setStreetName(name);    // set the street name
+			setStreetNumber(num);   // set the house number
+			setNumberOfLetters(l);  // set the number of letters
+			isDelievered = false;   // set is delivered to false as default
+			fullAddressString = streetNumber + " " + streetName;  // create a full address string for easy access by GUI
+		}
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 	
 	// Accessors
-	/**
-	 * @return
+	/** Returns street name
+	 * @return - the street name
 	 */
 	public String getStreetName() {
 		return streetName;
 	}
 	
-	/**
-	 * @return
+	/** returns the house number
+	 * @return - the house number
 	 */
 	public int getStreetNumber() {
 		return streetNumber;
 	}
 	
-	/**
-	 * @return
+	/** Returns the number of letters to be delivered
+	 * @return - the number of letters
 	 */
 	public int getNumberOfLetters() {
 		return numberOfLetters;
 	}
 	
-	/**
-	 * @return
+	/** Returns whether this address has been delivered or not
+	 * @return - boolean value for if delivered
 	 */
 	public boolean isDelievered() {
 		return isDelievered;
 	}
 	
 	// Mutators
-	/**
-	 * @param n
+	/** Sets the street name for this address
+	 * @param n - the street name (eg. "22nd Street")
 	 */
 	public void setStreetName(String n) {
 		streetName = n;
 	}
 	
-	/**
-	 * @param n
+	/** Sets the Street Number
+	 * @param n - the street number to set
+	 * @throws Exception - Invalid House Number
 	 */
-	public void setStreetNumber(int n) {
-		streetNumber = n;
+	public void setStreetNumber(int n) throws Exception {
+		if (n > 0) {
+			streetNumber = n;
+		}
+		else {
+			throw new Exception("Invalid House Number");
+		}
 	}
 	
-	/**
-	 * @param n
+	/** Sets the number of letters
+	 * @param n - the number of letters
+	 * @throws Exception - Invalid Number of Letters
 	 */
-	public void setNumberOfLetters(int n) {
-		numberOfLetters = n;
+	public void setNumberOfLetters(int n) throws Exception {
+		if (n >= 0) {
+			numberOfLetters = n;
+		}
+		else {
+			throw new Exception("Invalid Number of Letters");
+		}
 	}
 	
+	/** Returns a full address string for ease of cosmetic uses.
+	 *  this uses properties of the class
+	 *  Example: "309 24th Street"
+	 * @return - the FULL address string
+	 */
 	public String getAddressString() {
 		return fullAddressString;
 	}
 	
-	/**
-	 * 
+	/** sets the delivered status for this address to true
 	 */
 	public void deliverMail() {
-		//setNumberOfLetters(0);
 		isDelievered = true;
 	}
 }
